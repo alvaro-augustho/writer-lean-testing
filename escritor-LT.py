@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 from leantesting import Client as LT
+import requests
+
 
 project_id = 19792
 project_version_id = 26551
@@ -20,6 +22,30 @@ browsers_map = {
 	"Opera": 10
 }
 
+def create_attachments(issue, bug_id):
+
+	for att in issue['attachments']:
+		print(att)
+
+		file = open(att['filename'], 'wb')
+		url = att['url']
+		user, password = 'odt', 'B%$12.)pl'
+		resp = requests.get(url, auth=(user, password))
+		file.write(bytes(resp.content));
+
+
+		newAttachment = LT.bugs.find(bug_id).attachments.upload('./'+att['filename'])
+
+		issues.update_one(
+			{
+				'issuekey': issue['issuekey']
+			},
+			{
+				'$push': { 'externalAttachments': {att['id']: newAttachment.data['id'] } }
+
+			}, upsert=False)
+
+
 def create_issue(issue):
 
 	summary = issue['summary']
@@ -28,7 +54,6 @@ def create_issue(issue):
 	expected, actual, steps = parse_description(description)
 
 	priority = map_priority(issue['prioridade'])
-	print(priority)
 
 	newBug = LT.projects.find(project_id).bugs.create({
 		'title': summary,
@@ -53,6 +78,8 @@ def create_issue(issue):
 			}
 		}, upsert=False)
 
+	if issue['attachments'] is not None:
+		create_attachments(issue, bug_id)
 
 
 def get_component(component):
