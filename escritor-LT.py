@@ -111,6 +111,17 @@ device_os_map = {
     "LG G4 Beat": 265
 }
 
+def update_summary(summary):
+    return summary
+
+def update_description(description):
+    return parse_description(description)
+
+update_functions = {
+    "summary": update_summary,
+    "description": update_description
+}
+
 def create_attachments(issue, bug_id):
 
 	for att in issue['attachments']:
@@ -133,6 +144,56 @@ def create_attachments(issue, bug_id):
 				'$push': { 'externalAttachments': {att['id']: newAttachment.data['id'] } }
 
 			}, upsert=False)
+
+def create_update_body(diff):
+
+    issue = {}
+
+    print(diff)
+    for key in diff:
+        if key != "status":
+            if key == "summary":
+                issue["title"] = update_functions["summary"](diff[key]["object"])
+            if key == "description":
+                expected, actual, steps = update_functions["description"](diff[key]["object"])
+                issue["expected_results"] = expected
+                issue["description"] = actual
+                issue["steps"] = steps
+
+    return issue
+
+
+
+def update_issue(issue):
+
+    diff_list = issue['diffList']
+
+    for x in range(len(diff_list)):
+        if diff_list[x]['status'] == "to_do":
+            body = create_update_body(diff_list[x])
+            LT.bugs.update(issue['externalId'], body)
+
+            issues.update_one(
+                {
+                    'issuekey': issue['issuekey']
+                },
+                {
+                    '$set': {
+                        'diffList.'+str(x)+'.status': 'done'
+                    }
+                }, upsert=False)
+
+    issues.update_one(
+        {
+            'issuekey': issue['issuekey']
+        },
+        {
+            '$set': {
+                'toUpdate': False
+            }
+        }, upsert=False)
+
+
 
 
 def create_issue(issue):
@@ -241,9 +302,13 @@ print('Token atual: '+token)
 
 i = 0
 for issue in issues.find({'tipoDocumento':'ISSUE_INTEGRACAO'}):
-    if not issue['externalId']:
-        create_issue(issue)
-        i+=1
-        if i == 5:
-            break
+    if issue['issuekey'] == 'STWCSTWC-33':
+        if not issue['externalId']:
+            create_issue(issue)
+        if issue['toUpdate']:
+            update_issue(issue)
+
+            i+=1
+            if i == 5:
+                break
 
