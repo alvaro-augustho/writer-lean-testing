@@ -1,17 +1,26 @@
 from pymongo import MongoClient
 from leantesting import Client as LT
 import requests
+import re
 
 
 project_id = 19792
 project_version_id = 26551
+#project_version_id = 14085
 priority_map = {
-		"Blocker": 1,
-		"Critical": 2,
+		"Blocker": 4,
+		"Critical": 4,
 		"Major": 3,
-		"Minor": 4,
-		"Trivial": 4
+		"Minor": 2,
+		"Trivial": 1
 	}
+severity_map = {
+    "Blocker": 3,
+    "Critical": 3,
+    "Major": 2,
+    "Minor": 1,
+    "Trivial": 4
+}
 browsers_map = {
 	"Firefox": 1,
 	"Chrome": 2,
@@ -20,6 +29,86 @@ browsers_map = {
 	"Android browser": 5,
 	"Microsoft Edge": 8,
 	"Opera": 10
+}
+device_type_map = {
+    "iPhone 4S": 5,
+    "iPhone 5": 5,
+    "iPhone 5S": 5,
+    "iPhone 6 Plus": 5,
+
+    "Moto G1": 5,
+    "Moto G2": 5,
+    "Moto G3": 5,
+    "Moto E": 5,
+    "Moto X": 5,
+
+    "Galaxy S2": 5,
+    "Galaxy S3": 5,
+    "Galaxy S4": 5,
+    "Galaxy S5": 5,
+    "Galaxy S6": 5,
+    "Galaxy Grand Prime Duos": 5,
+    "Galaxy J5": 5,
+
+    "Zenfone 2": 5,
+
+    "Nexus 5": 5,
+
+    "LG G4 Beat": 5
+}
+
+device_model_map = {
+    "iPhone 4S": 3,
+    "iPhone 5": 2,
+    "iPhone 5S": 1783,
+    "iPhone 6 Plus": 2955,
+
+    "Moto G1": 1715,
+    "Moto G2": 4489,
+    "Moto G3": 6503,
+    "Moto E": 4370,
+    "Moto X": 248,
+
+    "Galaxy S2": 1179,
+    "Galaxy S3": 766,
+    "Galaxy S4": 1194,
+    "Galaxy S5": 3816,
+    "Galaxy S6": 3605,
+    "Galaxy Grand Prime Duos": 4219,
+    "Galaxy J5": 4920,
+
+    "Zenfone 2": 7666,
+
+    "Nexus 5": 1781,
+
+    "LG G4 Beat": 8119
+}
+
+device_os_map = {
+    "iPhone 4S": 248,
+    "iPhone 5": 266,
+    "iPhone 5S": 280,
+    "iPhone 6 Plus": 280,
+
+    "Moto G1": 247,
+    "Moto G2": 265,
+    "Moto G3": 265,
+    "Moto E": 242,
+    "Moto X": 247,
+
+    "Galaxy S2": 35,
+    "Galaxy S3": 51,
+    "Galaxy S4": 50,
+    "Galaxy S5": 269,
+    "Galaxy S6": 269,
+    "Galaxy Grand Prime Duos": 228,
+    "Galaxy J5": 256,
+
+    "Zenfone 2": 275,
+
+    "Nexus 5": 269,
+
+    "LG G4 Beat": 265
 }
 
 def create_attachments(issue, bug_id):
@@ -48,27 +137,34 @@ def create_attachments(issue, bug_id):
 
 def create_issue(issue):
 
-	summary = issue['summary']
-	description = issue['description']
+    summary, tags = parse_summary(issue['summary'])
+    description = issue['description']
 
-	expected, actual, steps = parse_description(description)
+    expected, actual, steps = parse_description(description)
 
-	priority = map_priority(issue['prioridade'])
+    priority = map_priority(issue['prioridade'])
 
-	newBug = LT.projects.find(project_id).bugs.create({
-		'title': summary,
-		'status_id': 1,
-		'severity_id': 2,
-		'project_version_id': project_version_id,
-		'description': actual,
-		'expected_results': expected,
-		'steps': steps,
-		'priority_id': priority,
-	})
+    component = get_component(issue['componente'])
 
-	bug_id = newBug.data['id']
+    platform = get_platform(issue['browser_device'][0]['value'])
 
-	issues.update_one(
+    newBug = LT.projects.find(project_id).bugs.create({
+        'title': summary,
+        'status_id': 1,
+        'severity_id': 2,
+        'project_version_id': project_version_id,
+        'description': actual,
+        'expected_results': expected,
+        'steps': steps,
+        'priority_id': priority,
+        'project_section_id': component,
+        'reproducibility_id': 1,
+        'platform': platform
+    })
+
+    bug_id = newBug.data['id']
+
+    issues.update_one(
 		{
 		'issuekey': issue['issuekey']
 		},
@@ -78,9 +174,17 @@ def create_issue(issue):
 			}
 		}, upsert=False)
 
-	if issue['attachments'] is not None:
-		create_attachments(issue, bug_id)
+    if issue['attachments'] is not None:
+        create_attachments(issue, bug_id)
 
+def get_platform(platform):
+    device_type = device_type_map[platform]
+    device_model = device_model_map[platform]
+    device_os = device_os_map[platform]
+
+    platform = {"device_model_id": device_model, "os": device_type, "os_version_id": device_os}
+
+    return platform
 
 def get_component(component):
 
@@ -93,11 +197,16 @@ def get_component(component):
 		'name': component
 	})
 
-	return new_section['id']
+	return new_section.data['id']
 
 
 def map_priority(priority):
 	return priority_map[priority]
+
+def parse_summary(summary):
+
+    tags = re.split('\[|\]', summary)[1]
+    return summary, tags
 
 def parse_description(description):
 
@@ -130,6 +239,11 @@ LT.attachToken(token)
 token = LT.getCurrentToken()
 print('Token atual: '+token)
 
+i = 0
 for issue in issues.find({'tipoDocumento':'ISSUE_INTEGRACAO'}):
-	if not issue['externalId']:
-		create_issue(issue)
+    if not issue['externalId']:
+        create_issue(issue)
+        i+=1
+        if i == 5:
+            break
+
