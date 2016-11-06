@@ -133,6 +133,27 @@ update_functions = {
     "platform": update_platform
 }
 
+def delete_attachments(issue, list_attachments):
+
+    for att in list_attachments:
+        att_id = att['id']
+
+        for att in issue['externalAttachments']:
+            if att_id in att:
+                external_att_id = att[att_id]
+                LT.attachments.delete(external_att_id)
+
+                issues.update_one(
+                    {
+                        'issuekey': issue['issuekey']
+                    },
+                    {
+                        '$pull': {'externalAttachments': {att_id: external_att_id}}
+
+                    }, upsert=False)
+                break
+
+
 def create_attachments(issue, bug_id, list_attachments):
 
 	for att in list_attachments:
@@ -182,7 +203,10 @@ def create_update_body(diff, original_issue):
                 issue["platform"] = update_functions["platform"](diff[key]["add"][0]["value"])
                 return issue
             if key == "attachments":
-                create_attachments(original_issue, original_issue['externalId'], diff[key]["add"])
+                if "add" in diff[key]:
+                    create_attachments(original_issue, original_issue['externalId'], diff[key]["add"])
+                if "delete" in diff[key]:
+                    delete_attachments(original_issue, diff[key]["delete"])
                 return None
 
 
