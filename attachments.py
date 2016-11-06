@@ -1,5 +1,6 @@
 import requests
 import os
+import mongo
 
 def delete_attachments(LT, issues, issue, list_attachments):
 
@@ -26,10 +27,13 @@ def create_attachments(LT, issues, issue, bug_id, list_attachments):
 
 	for att in list_attachments:
 
+		config = mongo.get_cabecalho()
+		user_jira = config['user_jira']
+		password_jira = config['password_jira']
+
 		file = open(att['filename'], 'wb')
 		url = att['url']
-		user, password = 'odt', 'B%$12.)pl'
-		resp = requests.get(url, auth=(user, password))
+		resp = requests.get(url, auth=(user_jira, password_jira))
 		file.write(bytes(resp.content));
 
 		newAttachment = LT.bugs.find(bug_id).attachments.upload('./'+att['filename'])
