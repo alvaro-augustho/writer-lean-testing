@@ -1,6 +1,4 @@
 from leantesting.Client import Client as LeanTestingClient
-import os
-from urllib.parse import quote
 
 LT = LeanTestingClient()
 

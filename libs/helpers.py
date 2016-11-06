@@ -1,5 +1,7 @@
 import re
-import mappings
+
+from libs import mappings
+
 
 def get_platform(platform):
     device_type = mappings.device_type_map[platform]

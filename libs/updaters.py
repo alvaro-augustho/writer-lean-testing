@@ -1,5 +1,4 @@
-import helpers
-import mappings
+from libs import mappings, helpers
 
 def update_summary(summary):
     return summary

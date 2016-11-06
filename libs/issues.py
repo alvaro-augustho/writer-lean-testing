@@ -1,7 +1,4 @@
-import mappings
-import attachments
-import helpers
-import updaters
+from libs import attachments, helpers, mappings, updaters
 
 def create_update_body(LT, issues, diff, original_issue):
 

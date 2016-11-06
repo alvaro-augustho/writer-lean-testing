@@ -1,6 +1,9 @@
-import requests
 import os
-import mongo
+
+import requests
+
+from libs import mongo
+
 
 def delete_attachments(LT, issues, issue, list_attachments):
 

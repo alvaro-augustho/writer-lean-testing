@@ -1,6 +1,4 @@
-import issues
-import lt_client
-import mongo
+from libs import mongo, lt_client, issues
 
 def main():
 
