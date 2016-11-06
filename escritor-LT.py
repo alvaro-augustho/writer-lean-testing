@@ -6,7 +6,6 @@ import re
 
 project_id = 19792
 project_version_id = 26551
-#project_version_id = 14085
 priority_map = {
 		"Blocker": 4,
 		"Critical": 4,
@@ -36,25 +35,25 @@ device_type_map = {
     "iPhone 5S": 5,
     "iPhone 6 Plus": 5,
 
-    "Moto G1": 5,
-    "Moto G2": 5,
-    "Moto G3": 5,
-    "Moto E": 5,
-    "Moto X": 5,
+    "Moto G1": 1,
+    "Moto G2": 1,
+    "Moto G3": 1,
+    "Moto E": 1,
+    "Moto X": 1,
 
-    "Galaxy S2": 5,
-    "Galaxy S3": 5,
-    "Galaxy S4": 5,
-    "Galaxy S5": 5,
-    "Galaxy S6": 5,
-    "Galaxy Grand Prime Duos": 5,
-    "Galaxy J5": 5,
+    "Galaxy S2": 1,
+    "Galaxy S3": 1,
+    "Galaxy S4": 1,
+    "Galaxy S5": 1,
+    "Galaxy S6": 1,
+    "Galaxy Grand Prime Duos": 1,
+    "Galaxy J5": 1,
 
-    "Zenfone 2": 5,
+    "Zenfone 2": 1,
 
-    "Nexus 5": 5,
+    "Nexus 5": 1,
 
-    "LG G4 Beat": 5
+    "LG G4 Beat": 1
 }
 
 device_model_map = {
@@ -117,9 +116,21 @@ def update_summary(summary):
 def update_description(description):
     return parse_description(description)
 
+def update_priority(prioridade):
+    return priority_map[prioridade], severity_map[prioridade]
+
+def update_componente(componente):
+    return get_component(componente)
+
+def update_platform(platform):
+    return get_platform(platform)
+
 update_functions = {
     "summary": update_summary,
-    "description": update_description
+    "description": update_description,
+    "prioridade": update_priority,
+    "componente": update_componente,
+    "platform": update_platform
 }
 
 def create_attachments(issue, bug_id):
@@ -154,14 +165,22 @@ def create_update_body(diff):
         if key != "status":
             if key == "summary":
                 issue["title"] = update_functions["summary"](diff[key]["object"])
+                return issue
             if key == "description":
                 expected, actual, steps = update_functions["description"](diff[key]["object"])
                 issue["expected_results"] = expected
                 issue["description"] = actual
                 issue["steps"] = steps
-
-    return issue
-
+                return issue
+            if key == "prioridade":
+                issue["priority_id"], issue["severity_id"] = update_functions["prioridade"](diff[key]["object"])
+                return issue
+            if key == "componente":
+                issue["project_section_id"] = update_functions["componente"](diff[key]["object"])
+                return issue
+            if key == "browser_device":
+                issue["platform"] = update_functions["platform"](diff[key]["add"][0]["value"])
+                return issue
 
 
 def update_issue(issue):
@@ -203,7 +222,9 @@ def create_issue(issue):
 
     expected, actual, steps = parse_description(description)
 
-    priority = map_priority(issue['prioridade'])
+    priority = priority_map(issue['prioridade'])
+
+    severity = severity_map(issue['prioridade'])
 
     component = get_component(issue['componente'])
 
@@ -212,7 +233,7 @@ def create_issue(issue):
     newBug = LT.projects.find(project_id).bugs.create({
         'title': summary,
         'status_id': 1,
-        'severity_id': 2,
+        'severity_id': severity,
         'project_version_id': project_version_id,
         'description': actual,
         'expected_results': expected,
