@@ -1,4 +1,4 @@
-from libs import attachments, helpers, mappings, updaters
+from libs import attachments, helpers, constants, updaters
 
 def create_update_body(LT, issues, diff, original_issue):
 
@@ -81,11 +81,11 @@ def create_issue(LT, issues, issue):
 
     platform = updaters.update_platform(issue['browser_device'][0]['value'])
 
-    newBug = LT.projects.find(mappings.project_id).bugs.create({
+    newBug = LT.projects.find(constants.project_id).bugs.create({
         'title': summary,
         'status_id': 1,
         'severity_id': severity,
-        'project_version_id': mappings.project_version_id,
+        'project_version_id': constants.project_version_id,
         'description': actual,
         'expected_results': expected,
         'steps': steps,

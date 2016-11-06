@@ -1,4 +1,4 @@
-from libs import mappings, helpers
+from libs import constants, helpers
 
 def update_summary(summary):
     return summary
@@ -7,7 +7,7 @@ def update_description(description):
     return helpers.parse_description(description)
 
 def update_priority(prioridade):
-    return mappings.priority_map[prioridade], mappings.severity_map[prioridade]
+    return constants.priority_map[prioridade], constants.severity_map[prioridade]
 
 def update_componente(LT, componente):
     return helpers.get_component(LT, componente)

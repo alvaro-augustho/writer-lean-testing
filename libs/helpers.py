@@ -1,12 +1,12 @@
 import re
 
-from libs import mappings
+from libs import constants
 
 
 def get_platform(platform):
-    device_type = mappings.device_type_map[platform]
-    device_model = mappings.device_model_map[platform]
-    device_os = mappings.device_os_map[platform]
+    device_type = constants.device_type_map[platform]
+    device_model = constants.device_model_map[platform]
+    device_os = constants.device_os_map[platform]
 
     platform = {"device_model_id": device_model, "os": device_type, "os_version_id": device_os}
 
@@ -14,12 +14,12 @@ def get_platform(platform):
 
 def get_component(LT, component):
 
-	components = LT.projects.find(mappings.project_id).sections.all().toArray()
+	components = LT.projects.find(constants.project_id).sections.all().toArray()
 	for c in components:
 		if c['name'] == component:
 			return c['id']
 
-	new_section = LT.projects.find(mappings.project_id).sections.create({
+	new_section = LT.projects.find(constants.project_id).sections.create({
 		'name': component
 	})
 

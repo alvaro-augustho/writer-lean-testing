@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="465491a6-f530-4c65-a992-a26c5050f8fa" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/attachments.py" afterPath="$PROJECT_DIR$/libs/attachments.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/get-auth-url.py" afterPath="$PROJECT_DIR$/libs/get-auth-url.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/get-token.py" afterPath="$PROJECT_DIR$/libs/get-token.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/helpers.py" afterPath="$PROJECT_DIR$/libs/helpers.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/issues.py" afterPath="$PROJECT_DIR$/libs/issues.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/lt_client.py" afterPath="$PROJECT_DIR$/libs/lt_client.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/mappings.py" afterPath="$PROJECT_DIR$/libs/mappings.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/mongo.py" afterPath="$PROJECT_DIR$/libs/mongo.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/updaters.py" afterPath="$PROJECT_DIR$/libs/updaters.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/libs/mappings.py" afterPath="$PROJECT_DIR$/libs/constants.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/helpers.py" afterPath="$PROJECT_DIR$/libs/helpers.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/issues.py" afterPath="$PROJECT_DIR$/libs/issues.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/libs/updaters.py" afterPath="$PROJECT_DIR$/libs/updaters.py" />
     </list>
     <ignored path="escritor-lean-testing.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,11 +33,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="41" selection-start-line="0" selection-start-column="41" selection-end-line="0" selection-end-column="41" />
+            <state relative-caret-position="72">
+              <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -70,11 +63,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mappings.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/libs/mappings.py">
+      <file leaf-file-name="constants.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/libs/constants.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1944">
-              <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
+            <state relative-caret-position="72">
+              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -104,8 +97,10 @@
         <entry file="file://$PROJECT_DIR$/libs/helpers.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="36">
-              <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-              <folding />
+              <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -962,14 +957,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/mappings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1944">
-          <caret line="108" column="0" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/lt_client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -986,14 +973,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/helpers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/get-token.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -1004,10 +983,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/get-auth-url.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="58" />
+        <state relative-caret-position="72">
+          <caret line="4" column="34" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
           <folding />
         </state>
       </provider>
@@ -1022,10 +1001,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/libs/get-auth-url.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="41" selection-start-line="0" selection-start-column="41" selection-end-line="0" selection-end-column="41" />
+          <caret line="0" column="58" selection-start-line="0" selection-start-column="58" selection-end-line="0" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="2" column="26" selection-start-line="2" selection-start-column="26" selection-end-line="2" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="72">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
           <folding />
         </state>
       </provider>
