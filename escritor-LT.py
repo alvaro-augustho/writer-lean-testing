@@ -133,9 +133,9 @@ update_functions = {
     "platform": update_platform
 }
 
-def create_attachments(issue, bug_id):
+def create_attachments(issue, bug_id, list_attachments):
 
-	for att in issue['attachments']:
+	for att in list_attachments:
 		print(att)
 
 		file = open(att['filename'], 'wb')
@@ -156,7 +156,7 @@ def create_attachments(issue, bug_id):
 
 			}, upsert=False)
 
-def create_update_body(diff):
+def create_update_body(diff, original_issue):
 
     issue = {}
 
@@ -181,6 +181,9 @@ def create_update_body(diff):
             if key == "browser_device":
                 issue["platform"] = update_functions["platform"](diff[key]["add"][0]["value"])
                 return issue
+            if key == "attachments":
+                create_attachments(original_issue, original_issue['externalId'], diff[key]["add"])
+                return None
 
 
 def update_issue(issue):
@@ -189,8 +192,9 @@ def update_issue(issue):
 
     for x in range(len(diff_list)):
         if diff_list[x]['status'] == "to_do":
-            body = create_update_body(diff_list[x])
-            LT.bugs.update(issue['externalId'], body)
+            body = create_update_body(diff_list[x], issue)
+            if body != None:
+                LT.bugs.update(issue['externalId'], body)
 
             issues.update_one(
                 {
@@ -222,9 +226,9 @@ def create_issue(issue):
 
     expected, actual, steps = parse_description(description)
 
-    priority = priority_map(issue['prioridade'])
+    priority = priority_map[issue['prioridade']]
 
-    severity = severity_map(issue['prioridade'])
+    severity = severity_map[issue['prioridade']]
 
     component = get_component(issue['componente'])
 
@@ -257,7 +261,7 @@ def create_issue(issue):
 		}, upsert=False)
 
     if issue['attachments'] is not None:
-        create_attachments(issue, bug_id)
+        create_attachments(issue, bug_id, issue['attachments'])
 
 def get_platform(platform):
     device_type = device_type_map[platform]
