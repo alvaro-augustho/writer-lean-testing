@@ -15,6 +15,9 @@ def create_update_body(LT, issues, diff, original_issue):
                 issue["description"] = actual
                 issue["steps"] = steps
                 return issue
+            if key == "tipoDefeito":
+                issue["type_id"] = updaters.update_functions["tipoDefeito"](diff[key]["object"])
+                return issue
             if key == "prioridade":
                 issue["priority_id"], issue["severity_id"] = updaters.update_functions["prioridade"](diff[key]["object"])
                 return issue
@@ -40,7 +43,7 @@ def update_issue(LT, issues, issue):
 
     for x in range(len(diff_list)):
         if diff_list[x]['status'] == "to_do":
-            body = create_update_body(diff_list[x], issue)
+            body = create_update_body(LT, issues, diff_list[x], issue)
             if body != None:
                 LT.bugs.update(issue['externalId'], body)
 
@@ -75,6 +78,8 @@ def create_issue(LT, issues, issue):
 
     expected, actual, steps = updaters.update_description(issue['description'])
 
+    type = updaters.update_type(issue["tipoDefeito"])
+
     priority, severity = updaters.update_priority(issue['prioridade'])
 
     component = updaters.update_componente(LT, issue['componente'])
@@ -84,6 +89,7 @@ def create_issue(LT, issues, issue):
     newBug = LT.projects.find(constants.project_id).bugs.create({
         'title': summary,
         'status_id': 1,
+        'type_id': type,
         'severity_id': severity,
         'project_version_id': constants.project_version_id,
         'description': actual,

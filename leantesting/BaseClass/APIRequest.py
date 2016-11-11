@@ -139,8 +139,6 @@ class APIRequest:
 		if isinstance(self._origin.getCurrentToken(), str):
 			curlHeaders.append('Authorization: Bearer ' + self._origin.getCurrentToken())
 
-		print(curlHeaders)
-
 		ch.setopt(ch.HTTPHEADER, curlHeaders)
 		ch.setopt(ch.URL, callUrl)
 

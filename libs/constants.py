@@ -1,6 +1,18 @@
-project_id = 19792
+project_id = 20193
+#project_id = 19792
 
-project_version_id = 26551
+project_version_id = 27421
+#project_version_id = 26551
+
+type_map = {
+    "UI Robustness": 3954,
+    "Input Validation": 3954,
+    "Security": 3956,
+    "App Robustness": 3956,
+    "Performance": 3955,
+    "Usability": 3955,
+    "Portability": 3955
+}
 
 priority_map = {
 		"Blocker": 4,
