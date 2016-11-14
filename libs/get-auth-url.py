@@ -3,7 +3,7 @@ from leantesting.Client import Client as LeanTestingClient
 LT = LeanTestingClient()
 
 generatedURL = LT.auth.generateAuthLink(
-    'GR3BXtSD3YZ90XOpclT7ZVn42U2pnJ3IivVCcWFa',
+    'oqMpIkSZDBnw5wvd1XAAzihEBCATDDy0JMOlvS9J',
     'http://54.243.245.122:8282/',
     'admin',
     'teste123'

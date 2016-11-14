@@ -1,8 +1,14 @@
 project_id = 20193
-#project_id = 19792
 
 project_version_id = 27421
-#project_version_id = 26551
+
+tokens_map = {
+    "eduardo.marques@sofist.com.br": "eltEOFHbZ4pA2B0Ng4BvlRcHXQDZmfEskM2xiwvL",
+    "bruno.abreu@sofist.com.br": "pU1Xfu3tO2QarVtfYMQx7R4Wm74HBguMerajkAYN",
+    "jeniffer.deus@sofist.com.br": "BeqQ9r4tDZAShQcZSGCXJaWxLrzFls65Tq1wupbY",
+    "fabio.scarpin@sofist.com.br": "sc4WDHQ3zqqhGULV8yQy8C52FjMuefPFTv2zibgj",
+    "odt@sofist.com.br": "eltEOFHbZ4pA2B0Ng4BvlRcHXQDZmfEskM2xiwvL"
+}
 
 type_map = {
     "UI Robustness": 3954,

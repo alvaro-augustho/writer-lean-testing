@@ -4,7 +4,6 @@ def main():
 
     lt = lt_client.get_lt_client()
     cabecalho = mongo.get_cabecalho()
-    lt.attachToken(cabecalho['authenticationToken'])
     issues_collection = mongo.get_collection()
 
     for issue in issues_collection.find({'tipoDocumento':'ISSUE_INTEGRACAO'}):

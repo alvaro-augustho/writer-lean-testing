@@ -44,3 +44,7 @@ def parse_description(description):
 		steps_arr = steps.strip().splitlines()
 
 	return expected, actual, steps_arr
+
+def get_reporter(LT, email_address):
+	LT.attachToken(constants.tokens_map[email_address])
+

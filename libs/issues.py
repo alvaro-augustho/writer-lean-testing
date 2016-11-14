@@ -39,6 +39,8 @@ def update_issue(LT, issues, issue):
 
     print("Atualizando issue: " + str(issue))
 
+    helpers.get_reporter(LT, issue["reporter"]["emailAddress"])
+
     diff_list = issue['diffList']
 
     for x in range(len(diff_list)):
@@ -73,6 +75,8 @@ def update_issue(LT, issues, issue):
 def create_issue(LT, issues, issue):
 
     print("Criando issue: " + str(issue))
+
+    helpers.get_reporter(LT, issue["reporter"]["emailAddress"])
 
     summary, tags = helpers.parse_summary(issue['summary'])
 
